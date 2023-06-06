@@ -1,5 +1,5 @@
 const Role = require('../models/role');
-const { Usuario, Categoria, Producto, Mutual } = require('../models');
+const { Usuario, Categoria, Producto, Mutual, Paciente } = require('../models');
 
 
 const esRoleValido = async(rol = '') => {
@@ -56,11 +56,22 @@ const existeProductoPorId = async( id ) => {
  * Mutuales
  */
  const existeMutualPorId = async( id ) => {
-    console.log('Llegue al db-validators');
     // Verificar si el correo existe
     const existeMutual = await Mutual.findById(id);
     console.log('existeMutual: ', existeMutual);
     if ( !existeMutual ) {
+        throw new Error(`El id no existe ${ id }`);
+    }
+}
+
+/**
+ * Pacientes
+ */
+ const existePacientePorId = async( id ) => {
+    // Verificar si el correo existe
+    const existePaciente = await Paciente.findById(id);
+    console.log('existeMutual: ', existePaciente);
+    if ( !existePaciente ) {
         throw new Error(`El id no existe ${ id }`);
     }
 }
@@ -73,6 +84,7 @@ module.exports = {
     existeUsuarioPorId,
     existeCategoriaPorId,
     existeProductoPorId,
-    existeMutualPorId
+    existeMutualPorId,
+    existePacientePorId
 }
 

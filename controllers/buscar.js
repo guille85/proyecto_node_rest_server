@@ -1,14 +1,15 @@
 const { response } = require('express');
 const { ObjectId } = require('mongoose').Types;
 
-const { Usuario, Categoria, Producto, Mutual } = require('../models');
+const { Usuario, Categoria, Mutual, Paciente, Producto  } = require('../models');
 
 const coleccionesPermitidas = [
     'usuarios',
     'categorias',
+    'mutuales',
+    'pacientes',
     'productos',
-    'roles',
-    'mutuales'
+    'roles'    
 ];
 
 const buscarUsuarios = async( termino = '', res = response ) => {
@@ -97,6 +98,30 @@ const buscarMutuales = async( termino = '', res = response ) => {
 }
 
 
+const buscarPacientes = async( termino = '', res = response ) => {
+
+    const esMongoID = ObjectId.isValid( termino ); // TRUE 
+
+    if ( esMongoID ) {
+        const paciente = await Paciente.findById(termino)
+                            .populate('mutual','nombre');
+        return res.json({
+            results: ( paciente ) ? [ paciente ] : []
+        });
+    }
+
+    const regex = new RegExp( termino, 'i' );
+    const pacientes = await Paciente.find({ nombre: regex, estado: true })
+                            .populate('mutual','nombre')
+
+    res.json({
+        results: pacientes
+    });
+
+}
+
+
+
 const buscar = ( req, res = response ) => {
     
     const { coleccion, termino  } = req.params;
@@ -119,6 +144,9 @@ const buscar = ( req, res = response ) => {
         break;
         case 'mutuales':
             buscarMutuales(termino, res);
+        break;
+        case 'pacientes':
+            buscarPacientes(termino, res);
         break;
 
         default:

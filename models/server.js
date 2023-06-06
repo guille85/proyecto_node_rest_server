@@ -13,9 +13,10 @@ class Server {
             auth:       '/api/auth',
             buscar:     '/api/buscar',
             categorias: '/api/categorias',
+            mutuales:   '/api/mutuales',
+            pacientes:   '/api/pacientes',
             productos:  '/api/productos',
-            usuarios:   '/api/usuarios',
-            mutuales:   '/api/mutuales'
+            usuarios:   '/api/usuarios'
         }
 
 
@@ -52,9 +53,11 @@ class Server {
         this.app.use( this.paths.auth, require('../routes/auth'));
         this.app.use( this.paths.buscar, require('../routes/buscar'));
         this.app.use( this.paths.categorias, require('../routes/categorias'));
+        this.app.use( this.paths.mutuales, require('../routes/mutuales'));
+        this.app.use( this.paths.pacientes, require('../routes/pacientes'));
         this.app.use( this.paths.productos, require('../routes/productos'));
         this.app.use( this.paths.usuarios, require('../routes/usuarios'));
-        this.app.use( this.paths.mutuales, require('../routes/mutuales'));
+
     }
 
     listen() {
